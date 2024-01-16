@@ -2,6 +2,7 @@ const {
   convertTimestampToDate,
   createRef,
   formatComments,
+  checkColumnInTable,
 } = require("../db/seeds/utils");
 
 describe("convertTimestampToDate", () => {
@@ -102,3 +103,23 @@ describe("formatComments", () => {
     expect(formattedComments[0].created_at).toEqual(new Date(timestamp));
   });
 });
+
+// describe("Check If Exists", () => {
+//   test("should return true for an existing column in articles table", async () => {
+//     const columnExists = await checkColumnInTable("existingColumn", "articles");
+//     expect(columnExists).toBe(true);
+//   });
+
+//   test("should return false for a non-existing column in articles table", async () => {
+//     const columnExists = await checkColumnInTable(
+//       "nonExistingColumn",
+//       "articles"
+//     );
+//     expect(columnExists).toBe(false);
+//   });
+//   test("should throw a database error in checkColumnInTable", async () => {
+//     await expect(
+//       checkColumnInTable("columnName", "invalidTable")
+//     ).rejects.toThrow();
+//   });
+// });
