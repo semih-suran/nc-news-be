@@ -1,4 +1,4 @@
-const db = require('../connection')
+const db = require("../connection");
 
 exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
   if (!created_at) return { ...otherProperties };
@@ -21,20 +21,4 @@ exports.formatComments = (comments, idLookup) => {
       ...this.convertTimestampToDate(restOfComment),
     };
   });
-};
-
-exports.checkColumnInTable = (column, table) => {
-  return db
-    .query(`SELECT * FROM ${table} WHERE ${column} = $1`, [column])
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return false;
-      } else {
-        return true;
-      }
-    })
-    .catch((error) => {
-      console.log("ERROR: Checking Column In Table");
-      throw error;
-    });
 };
