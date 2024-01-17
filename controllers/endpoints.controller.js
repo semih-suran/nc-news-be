@@ -1,7 +1,7 @@
 const fs = require("fs");
 const endpointsPath = "./endpoints.json";
 
-const listAllEndpoints = (req, res, next) => {
+const getAllEndpoints = (req, res, next) => {
   try {
     const endpoints = JSON.parse(fs.readFileSync(endpointsPath, "utf-8"));
     res.json(endpoints);
@@ -10,4 +10,4 @@ const listAllEndpoints = (req, res, next) => {
   }
 };
 
-module.exports = listAllEndpoints;
+module.exports = getAllEndpoints;
