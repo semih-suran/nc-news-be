@@ -145,8 +145,15 @@ describe("Set of GET Tests", () => {
         .expect(200)
         .then((response) => {
           const comments = response.body;
-          expect(comments.length > 0).toBe(true);
-          expect(Array.isArray(comments)).toBe(true);
+          expect(comments.length === 2).toBe(true);
+          comments.forEach((comment) => {
+            expect(comment).toHaveProperty("comment_id");
+            expect(comment).toHaveProperty("body");
+            expect(comment).toHaveProperty("article_id");
+            expect(comment).toHaveProperty("author");
+            expect(comment).toHaveProperty("votes");
+            expect(comment).toHaveProperty("created_at");
+          });
         });
     });
     test("should return a Status Code: 404 for a non-existent article ID ", () => {
@@ -155,7 +162,17 @@ describe("Set of GET Tests", () => {
         .expect(404)
         .then((response) => {
           expect(response.body.msg).toBe(
-            "No Comments Found For This Article..."
+            "No Comments Found For This Article ID..."
+          );
+        });
+    });
+    test("should return a Status Code: 404 for an article ID with no comments yet", () => {
+      return supertest(app)
+        .get("/api/articles/2/comments")
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe(
+            "No Comments Found For This Article ID..."
           );
         });
     });

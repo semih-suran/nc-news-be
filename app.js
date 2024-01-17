@@ -7,7 +7,7 @@ const {
   getArticleById,
   getArticlesByLifo,
 } = require("./controllers/articles.controller");
-const {getCommentsByArticleIdLifo} = require('./controllers/comments.controller')
+const {getCommentsByArticleIdLifo, postCommentToArticle} = require('./controllers/comments.controller')
 const {
   psqlErrorHandler,
   customErrorHandler,
@@ -23,6 +23,8 @@ app.get("/api/articles", getArticlesByLifo);
 app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleIdLifo);
+
+app.post("/api/articles/:article_id/comments", postCommentToArticle);
 
 app.use(psqlErrorHandler);
 app.use(customErrorHandler);
