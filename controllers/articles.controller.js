@@ -9,14 +9,14 @@ const getArticleById = (req, res, next) => {
     //convert to number then check if that is actually a number
     return res
       .status(400)
-      .json({ msg: "Invalid article_id Format. Must Be a Number." });
+      .send({ msg: "Invalid article_id Format. Must Be a Number." });
   }
   fetchArticleById(articleId)
     .then((article) => {
       if (article.length === 0) {
         return Promise.reject({ status: 404, msg: "Article Not Found" });
       }
-      res.status(200).json(article[0]);
+      res.status(200).send(article[0]);
     })
     .catch(next);
 };
@@ -24,7 +24,7 @@ const getArticleById = (req, res, next) => {
 const getArticlesByLifo = (req, res, next) => {
   fetchArticlesWithCommentCount()
     .then((articles) => {
-      res.json(articles);
+      res.send(articles);
     })
     .catch(next);
 };
