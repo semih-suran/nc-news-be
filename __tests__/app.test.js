@@ -13,7 +13,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe("Set of GET Tests", () => {
+describe("GET Tests", () => {
   describe("GET ALL topics", () => {
     test("should return a Status Code : 200", () => {
       return supertest(app).get("/api/topics").expect(200);
@@ -123,7 +123,7 @@ describe("Set of GET Tests", () => {
         .expect(200)
         .then((response) => {
           const articles = response.body;
-          expect(articles.length > 0).toBe(true);
+          expect(articles.length === 13).toBe(true);
           articles.forEach((article) => {
             expect(article).not.toHaveProperty("body");
             expect(article).toHaveProperty("author");
@@ -139,7 +139,7 @@ describe("Set of GET Tests", () => {
     });
   });
   describe("GET Comments By Article ID", () => {
-    test("should return all comments for a specific article_id", () => {
+    test("should return all comments for a specific article_id with correct structure", () => {
       return supertest(app)
         .get("/api/articles/5/comments")
         .expect(200)
@@ -156,14 +156,12 @@ describe("Set of GET Tests", () => {
           });
         });
     });
-    test("should return a Status Code: 404 for a non-existent article ID ", () => {
+    test("should return a Status Code: 400 for a non-existent article ID ", () => {
       return supertest(app)
         .get("/api/articles/888/comments")
-        .expect(404)
+        .expect(400)
         .then((response) => {
-          expect(response.body.msg).toBe(
-            "No Comments Found For This Article ID..."
-          );
+          expect(response.body.msg).toBe("Non-existent Article ID");
         });
     });
     test("should return a Status Code: 404 for an article ID with no comments yet", () => {
@@ -178,12 +176,74 @@ describe("Set of GET Tests", () => {
     });
     test("should return a Status Code: 400 if passed article ID is not a number", () => {
       return supertest(app)
-        .get("/api/articles/semih/comments")
+        .get("/api/articles/semih5/comments")
         .expect(400)
         .then((response) => {
           expect(response.body.msg).toBe(
             "Invalid article_id Format. Must Be a Number."
           );
+        });
+    });
+  });
+});
+describe("POST Tests", () => {
+  describe("POST Comments By Article ID", () => {
+    test("should return a Status Code: 201 and add a comment to the specified article", () => {
+      const newComment = {
+        username: "lurker",
+        body: "This article is FAN TEST IC.",
+      };
+      return supertest(app)
+        .post("/api/articles/5/comments")
+        .send(newComment)
+        .expect(201)
+        .then((response) => {
+          const comment = response.body;
+          expect(comment).toHaveProperty("comment_id");
+          expect(comment.author).toBe(newComment.username);
+          expect(comment.body).toBe(newComment.body);
+          expect(comment.article_id).toBe(5);
+        });
+    });
+    test("should return a Status Code: 400 if the request (body) is missing required properties", () => {
+      const userNameOnly = {
+        username: "Semih",
+      };
+      return supertest(app)
+        .post("/api/articles/1/comments")
+        .send(userNameOnly)
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe(
+            "(username) and (body) are required fields."
+          );
+        });
+    });
+    test("should return a Status Code: 400 if the request (username) is missing required properties", () => {
+      const bodyOnly = {
+        body: "This article is FAN TEST IC.",
+      };
+      return supertest(app)
+        .post("/api/articles/1/comments")
+        .send(bodyOnly)
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe(
+            "(username) and (body) are required fields."
+          );
+        });
+    });
+    test("should return a Status Code: 400 if the specified article ID does not exist", () => {
+      const newComment = {
+        username: "Semih",
+        body: "This article is FAN TEST IC.",
+      };
+      return supertest(app)
+        .post("/api/articles/999/comments")
+        .send(newComment)
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe("Non-existent Article ID");
         });
     });
   });
