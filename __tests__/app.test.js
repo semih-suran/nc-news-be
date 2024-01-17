@@ -4,7 +4,6 @@ const app = require("../app");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
-const { request } = require("http");
 
 beforeEach(() => {
   return seed(testData);
@@ -90,7 +89,7 @@ describe("Set of GET Tests", () => {
           );
         });
     });
-    test("should return an article with the Correct Structure", () => {
+    test("should return an article with the correct structure", () => {
       return supertest(app)
         .get("/api/articles/8")
         .expect(200)
@@ -111,22 +110,20 @@ describe("Set of GET Tests", () => {
     test("should return all articles in descending order", () => {
       return supertest(app)
         .get("/api/articles")
+        .expect(200)
         .then((response) => {
-          expect(response.status).toBe(200);
           const articles = response.body;
-          for (let i = 0; i < articles.length - 1; i++) {
-            const currentCreatedAt = articles[i].created_at;
-            const nextCreatedAt = articles[i + 1].created_at;
-            expect(currentCreatedAt >= nextCreatedAt).toBe(true);
-          }
+          expect(articles).toBeSortedBy("created_at", { descending: true });
         });
     });
+
     test("should NOT have (body) property but should have the correct structure", () => {
       return supertest(app)
         .get("/api/articles")
+        .expect(200)
         .then((response) => {
-          expect(response.status).toBe(200);
           const articles = response.body;
+          expect(articles.length > 0).toBe(true);
           articles.forEach((article) => {
             expect(article).not.toHaveProperty("body");
             expect(article).toHaveProperty("author");
@@ -138,6 +135,38 @@ describe("Set of GET Tests", () => {
             expect(article).toHaveProperty("article_img_url");
             expect(article).toHaveProperty("comment_count");
           });
+        });
+    });
+  });
+  describe("GET Comments By Article ID", () => {
+    test("should return all comments for a specific article_id", () => {
+      return supertest(app)
+        .get("/api/articles/5/comments")
+        .expect(200)
+        .then((response) => {
+          const comments = response.body;
+          expect(comments.length > 0).toBe(true);
+          expect(Array.isArray(comments)).toBe(true);
+        });
+    });
+    test("should return a Status Code: 404 for a non-existent article ID ", () => {
+      return supertest(app)
+        .get("/api/articles/888/comments")
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe(
+            "No Comments Found For This Article..."
+          );
+        });
+    });
+    test("should return a Status Code: 400 if passed article ID is not a number", () => {
+      return supertest(app)
+        .get("/api/articles/semih/comments")
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe(
+            "Invalid article_id Format. Must Be a Number."
+          );
         });
     });
   });
