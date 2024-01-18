@@ -19,6 +19,8 @@ const {
   serverErrorHandler,
 } = require("./error-handlers");
 
+const {getAllUsers} = require("./controllers/users.controller")
+
 app.get("/api/topics", getAllTopics);
 
 app.get("/api/endpoints", getAllEndpoints);
@@ -28,6 +30,8 @@ app.get("/api/articles", getArticlesByLifo);
 app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleIdLifo);
+
+app.get("/api/users", getAllUsers);
 
 app.post("/api/articles/:article_id/comments", postCommentToArticle);
 

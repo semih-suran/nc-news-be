@@ -183,6 +183,42 @@ describe("GET Tests", () => {
         });
     });
   });
+  describe("GET Users", () => {
+    test("should return a Status Code : 200", () => {
+      return supertest(app).get("/api/users").expect(200);
+    });
+    test("should return an array of users", () => {
+      return supertest(app)
+        .get("/api/users")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.users).toBeInstanceOf(Array);
+        });
+    });
+    test("should have all 4 users", () => {
+      return supertest(app)
+        .get("/api/users")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.users.length).toBe(4);
+        });
+    });
+    test("should return all users with the correct structure", () => {
+      return supertest(app)
+        .get("/api/users")
+        .expect(200)
+        .then((response) => {
+          response.body.users.forEach((users) => {
+            expect(users).toHaveProperty("username");
+            expect(users).toHaveProperty("name");
+            expect(users).toHaveProperty("avatar_url");
+          });
+        });
+    });
+    test("should return a Status Code : 404 when invalid", () => {
+      return supertest(app).get("/api/8_not_valid_name_8").expect(404);
+    });
+  });
 });
 describe("POST Tests", () => {
   describe("POST Comments By Article ID", () => {
