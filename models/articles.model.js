@@ -4,7 +4,7 @@ const fetchArticleById = (articleId) => {
   if (isNaN(articleId)) {
     return Promise.reject({
       status: 400,
-      msg: "Invalid article_id Format. Must Be a Number.",
+      msg: "Invalid (article_id) Format. Must Be a Number.",
     });
   }
   return db
@@ -48,7 +48,7 @@ const checkIfArticleExists = (articleId) => {
   if (isNaN(articleId)) {
     return Promise.reject({
       status: 400,
-      msg: "Invalid article_id Format. Must Be a Number.",
+      msg: "Invalid (article_id) Format. Must Be a Number.",
     });
   }
 
@@ -61,7 +61,7 @@ const patchVotes = (articleId, inc_votes) => {
   if (isNaN(articleId)) {
     return Promise.reject({
       status: 400,
-      msg: "Invalid article_id Format. Must Be a Number.",
+      msg: "Invalid (article_id) Format. Must Be a Number.",
     });
   }
 
