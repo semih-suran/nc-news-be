@@ -11,6 +11,7 @@ const {
 const {
   getCommentsByArticleIdLifo,
   postCommentToArticle,
+  deleteComment,
 } = require("./controllers/comments.controller");
 const {
   psqlErrorHandler,
@@ -31,6 +32,8 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleIdLifo);
 app.post("/api/articles/:article_id/comments", postCommentToArticle);
 
 app.patch("/api/articles/:article_id", patchArticleVotes);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.use(psqlErrorHandler);
 app.use(customErrorHandler);

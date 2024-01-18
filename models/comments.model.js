@@ -10,12 +10,6 @@ const fetchCommentsByArticleId = (articleId) => {
 };
 
 const addCommentToArticle = (articleId, username, body) => {
-  if (isNaN(articleId)) {
-    return Promise.reject({
-      status: 400,
-      msg: "Invalid article_id Format. Must Be a Number.",
-    });
-  }
   return db
     .query(`SELECT * FROM users WHERE username = $1;`, [username])
     .then((userResult) => {
@@ -42,4 +36,30 @@ const addCommentToArticle = (articleId, username, body) => {
     });
 };
 
-module.exports = { fetchCommentsByArticleId, addCommentToArticle };
+const checkIfCommentExists = (commentId) => {
+  if (isNaN(commentId)) {
+    return Promise.reject({
+      status: 400,
+      msg: "Invalid (comment_id) Format. Must Be a Number.",
+    });
+  }
+  return db
+    .query("SELECT * FROM comments WHERE comment_id = $1", [commentId])
+    .then((result) => result.rows.length > 0);
+};
+
+const deleteCommentByCommentId = (commentId) => {
+  return db
+    .query("DELETE FROM comments WHERE comment_id = $1;", [commentId])
+    .then((result) => result.rows)
+    .catch((error) => {
+      throw error;
+    });
+};
+
+module.exports = {
+  fetchCommentsByArticleId,
+  addCommentToArticle,
+  deleteCommentByCommentId,
+  checkIfCommentExists,
+};

@@ -71,7 +71,7 @@ describe("GET Tests", () => {
     test("should return a Status Code: 200 for a successful request", () => {
       return supertest(app).get("/api/articles/5").expect(200);
     });
-    test("should return a Status Code: 404 for a non-existent article ID", () => {
+    test("should return a Status Code: 404 for a non-existent (article_id)", () => {
       return supertest(app)
         .get("/api/articles/888")
         .expect(404)
@@ -79,13 +79,13 @@ describe("GET Tests", () => {
           expect(response.body.msg).toBe("Article Not Found");
         });
     });
-    test("should return a Status Code: 400 if passed article ID is not a number", () => {
+    test("should return a Status Code: 400 if passed (article_id) is not a number", () => {
       return supertest(app)
         .get("/api/articles/semih8")
         .expect(400)
         .then((response) => {
           expect(response.body.msg).toBe(
-            "Invalid article_id Format. Must Be a Number."
+            "Invalid (article_id) Format. Must Be a Number."
           );
         });
     });
@@ -139,7 +139,7 @@ describe("GET Tests", () => {
     });
   });
   describe("GET Comments By Article ID", () => {
-    test("should return all comments for a specific article_id with correct structure", () => {
+    test("should return all comments for a specific (article_id) with correct structure", () => {
       return supertest(app)
         .get("/api/articles/5/comments")
         .expect(200)
@@ -156,7 +156,7 @@ describe("GET Tests", () => {
           });
         });
     });
-    test("should return a Status Code: 400 for a non-existent article ID ", () => {
+    test("should return a Status Code: 400 for a non-existent (article_id)", () => {
       return supertest(app)
         .get("/api/articles/888/comments")
         .expect(404)
@@ -164,23 +164,21 @@ describe("GET Tests", () => {
           expect(response.body.msg).toBe("Non-existent Article ID");
         });
     });
-    test("should return a Status Code: 404 for an article ID with no comments yet", () => {
+    test("should return a Status Code: 200 and an empty array for an (article_id) with no comments yet", () => {
       return supertest(app)
         .get("/api/articles/2/comments")
-        .expect(404)
+        .expect(200)
         .then((response) => {
-          expect(response.body.msg).toBe(
-            "No Comments Found For This Article ID..."
-          );
+          expect(response.body).toEqual([]);
         });
     });
-    test("should return a Status Code: 400 if passed article ID is not a number", () => {
+    test("should return a Status Code: 400 if passed (article_id) is not a number", () => {
       return supertest(app)
         .get("/api/articles/semih5/comments")
         .expect(400)
         .then((response) => {
           expect(response.body.msg).toBe(
-            "Invalid article_id Format. Must Be a Number."
+            "Invalid (article_id) Format. Must Be a Number."
           );
         });
     });
@@ -199,7 +197,6 @@ describe("POST Tests", () => {
         .expect(201)
         .then((response) => {
           const comment = response.body;
-          console.log(comment);
           expect(comment).toHaveProperty("comment_id");
           expect(comment).toHaveProperty("created_at");
           expect(comment).toHaveProperty("votes");
@@ -247,7 +244,7 @@ describe("POST Tests", () => {
           expect(response.body.msg).toBe("(username) does not exist.");
         });
     });
-    test("should return a Status Code: 404 if the article ID does not exist", () => {
+    test("should return a Status Code: 404 if the (article_id) does not exist", () => {
       const newComment = {
         username: "semih",
         body: "This article is FAN TEST IC.",
@@ -260,7 +257,7 @@ describe("POST Tests", () => {
           expect(response.body.msg).toBe("Non-existent Article ID");
         });
     });
-    test("should return a Status Code: 400 if given article ID is not a number", () => {
+    test("should return a Status Code: 400 if given (article_id) is not a number", () => {
       const newComment = {
         username: "semih",
         body: "This article is FAN TEST IC.",
@@ -270,7 +267,7 @@ describe("POST Tests", () => {
         .expect(400)
         .then((response) => {
           expect(response.body.msg).toBe(
-            "Invalid article_id Format. Must Be a Number."
+            "Invalid (article_id) Format. Must Be a Number."
           );
         });
     });
@@ -278,30 +275,29 @@ describe("POST Tests", () => {
 });
 describe("PATCH Tests", () => {
   describe("PATCH Votes By Article ID", () => {
-    test("should return a Status Code: 201 and add PATCH the specified article", () => {
+    test("should return a Status Code: 200 and add PATCH the specified article", () => {
       const newVote = {
         inc_votes: 18,
       };
       return supertest(app)
         .patch("/api/articles/5")
         .send(newVote)
-        .expect(201)
+        .expect(200)
         .then((response) => {
-          const vote = response.body[0];
-          expect(vote).toHaveProperty("title");
-          expect(vote).toHaveProperty("topic");
-          expect(vote).toHaveProperty("author");
-          expect(vote).toHaveProperty("body");
-          expect(vote).toHaveProperty("created_at");
-          expect(vote).toHaveProperty("article_img_url");
-          expect(vote.votes).toBe(18);
-          expect(vote.article_id).toBe(5);
+          const article = response.body[0];
+          expect(article).toHaveProperty("title");
+          expect(article).toHaveProperty("topic");
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("body");
+          expect(article).toHaveProperty("created_at");
+          expect(article).toHaveProperty("article_img_url");
+          expect(article.votes).toBe(18);
+          expect(article.article_id).toBe(5);
         });
     });
     test("should return a Status Code: 400 if there is no (inc_votes) key.", () => {
       const RandomInfo1 = {
-        randomInfo:
-          "Chocolate does not ask any questions. Chocolate simply understands.",
+        randomInfo: "I did not fall down. I did attack the floor, though.",
       };
       return supertest(app)
         .patch("/api/articles/5/")
@@ -313,22 +309,29 @@ describe("PATCH Tests", () => {
           );
         });
     });
-    test("should return a Status Code: 400 if there are more keys with (inc_votes).", () => {
+    test("should return a Status Code: 200 and ignore if there are more keys with (inc_votes)", () => {
       const RandomInfo2 = {
         inc_votes: 7,
-        randomInfo: "I did not fall down. I did attack the floor, though.",
+        randomInfo:
+          "Chocolate does not ask any questions. Chocolate simply understands.",
       };
       return supertest(app)
         .patch("/api/articles/5/")
         .send(RandomInfo2)
-        .expect(400)
+        .expect(200)
         .then((response) => {
-          expect(response.body.msg).toBe(
-            "(inc_votes) is required and should be the only key."
-          );
+          const article = response.body[0];
+          expect(article.article_id).toBe(5);
+          expect(article).toHaveProperty("title");
+          expect(article).toHaveProperty("topic");
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("body");
+          expect(article).toHaveProperty("created_at");
+          expect(article.votes).toBe(7);
+          expect(article).toHaveProperty("article_img_url");
         });
     });
-    test("should return a Status Code: 404 if the specified article ID does not exist", () => {
+    test("should return a Status Code: 404 if the specified (article_id) does not exist", () => {
       const validValue = {
         inc_votes: 7,
       };
@@ -338,6 +341,50 @@ describe("PATCH Tests", () => {
         .expect(404)
         .then((response) => {
           expect(response.body.msg).toBe("Non-existent Article ID");
+        });
+    });
+    test("should return a Status Code: 400 if given (article_id) is not a number", () => {
+      const validValue = {
+        inc_votes: 7,
+      };
+      return supertest(app)
+        .patch("/api/articles/semih8/")
+        .send(validValue)
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe(
+            "Invalid (article_id) Format. Must Be a Number."
+          );
+        });
+    });
+  });
+});
+describe("DELETE Tests", () => {
+  describe("DELETE Comments By Comment ID", () => {
+    test("should return a Status Code: 204 and DELETE the specified comment", () => {
+      return supertest(app)
+        .delete("/api/comments/5")
+        .expect(204)
+        .then((response) => {
+          expect(response.body).toEqual({});
+        });
+    });
+    test("should return a Status Code: 404 for a non-existent (comment_id)", () => {
+      return supertest(app)
+        .delete("/api/comments/999")
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe("Non-existent Comment ID");
+        });
+    });
+    test("should return a Status Code: 400 when an invalid (comment_id) format given", () => {
+      return supertest(app)
+        .delete("/api/comments/semih7")
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe(
+            "Invalid (comment_id) Format. Must Be a Number."
+          );
         });
     });
   });

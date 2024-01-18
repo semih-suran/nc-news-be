@@ -1,6 +1,8 @@
 const {
   fetchCommentsByArticleId,
   addCommentToArticle,
+  deleteCommentByCommentId,
+  checkIfCommentExists,
 } = require("../models/comments.model");
 const { checkIfArticleExists } = require("../models/articles.model");
 
@@ -16,9 +18,6 @@ const getCommentsByArticleIdLifo = async (req, res, next) => {
 
     const comments = await fetchCommentsByArticleId(articleId);
 
-    if (comments.length === 0) {
-      throw { status: 404, msg: "No Comments Found For This Article ID..." };
-    }
     res.send(comments);
   } catch (error) {
     next(error);
@@ -40,11 +39,36 @@ const postCommentToArticle = (req, res, next) => {
       res.status(201).send(comment);
     })
     .catch((error) => {
-      if (error.status === 400 && error.msg === "(username) and (body) are required fields.") {
+      if (
+        error.status === 400 &&
+        error.msg === "(username) and (body) are required fields."
+      ) {
         return res.status(400).send(error);
       }
       next(error);
     });
 };
 
-module.exports = { getCommentsByArticleIdLifo, postCommentToArticle };
+const deleteComment = (req, res, next) => {
+  const commentId = req.params.comment_id;
+  
+  checkIfCommentExists(commentId)
+    .then((exists) => {
+      if (!exists) {
+        return res.status(404).send({ msg: "Non-existent Comment ID" });
+      }
+      return deleteCommentByCommentId(commentId);
+    })
+    .then((result) => {
+      res.status(204).send(result);
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+module.exports = {
+  getCommentsByArticleIdLifo,
+  postCommentToArticle,
+  deleteComment,
+};
