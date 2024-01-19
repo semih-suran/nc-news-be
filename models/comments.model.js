@@ -1,4 +1,7 @@
 const db = require("../db/connection");
+const {
+  getCommentsByArticleIdLifo,
+} = require("../controllers/comments.controller");
 
 const fetchCommentsByArticleId = (articleId) => {
   return db

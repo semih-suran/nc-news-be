@@ -26,7 +26,7 @@ app.get("/api/topics", getAllTopics);
 
 app.get("/api/endpoints", getAllEndpoints);
 
-app.get("/api/articles/topic", getArticlesByQuery);
+app.get("/api/articles", getArticlesByQuery);
 
 app.get("/api/articles", getArticlesByLifo);
 

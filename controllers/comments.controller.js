@@ -51,7 +51,7 @@ const postCommentToArticle = (req, res, next) => {
 
 const deleteComment = (req, res, next) => {
   const commentId = req.params.comment_id;
-  
+
   checkIfCommentExists(commentId)
     .then((exists) => {
       if (!exists) {

@@ -15,7 +15,7 @@ const getArticleById = (req, res, next) => {
       if (article.length === 0) {
         return Promise.reject({ status: 404, msg: "Article Not Found" });
       }
-      res.status(200).send(article[0]);
+      res.status(200).send(article);
     })
     .catch(next);
 };
@@ -52,9 +52,8 @@ const patchArticleVotes = (req, res, next) => {
 
 const getArticlesByQuery = (req, res, next) => {
   const query = req.query.topic;
-
   if (!query) {
-    return next({ status: 400, msg: "Missing (topic) query parameter." });
+    return getArticlesByLifo(req, res, next);
   }
   fetchArticlesByTopic(query)
     .then((topics) => {
