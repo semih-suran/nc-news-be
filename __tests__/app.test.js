@@ -91,20 +91,20 @@ describe("GET Tests", () => {
           );
         });
     });
-    test("should return an article with the correct structure", () => {
+    test("should return the specified article with the correct structure", () => {
       return supertest(app)
         .get("/api/articles/8")
         .expect(200)
         .then((response) => {
-          const article = response.body;
+          const article = response.body[0];
           expect(article.article_id).toBe(8);
           expect(article).toHaveProperty("title");
           expect(article).toHaveProperty("topic");
           expect(article).toHaveProperty("author");
-          expect(article).toHaveProperty("body");
           expect(article).toHaveProperty("created_at");
           expect(article).toHaveProperty("votes");
           expect(article).toHaveProperty("article_img_url");
+          expect(article).toHaveProperty("comment_count");
         });
     });
   });
@@ -137,6 +137,48 @@ describe("GET Tests", () => {
             expect(article).toHaveProperty("article_img_url");
             expect(article).toHaveProperty("comment_count");
           });
+        });
+    });
+  });
+  describe("GET Articles By Topic Query", () => {
+    test("should return article(s) by specified (topic) with correct structure", () => {
+      return supertest(app)
+        .get("/api/articles")
+        .query({ topic: "cats" })
+        .expect(200)
+        .then((response) => {
+          const theOnlyArticle = response.body[0];
+          expect(response.body.length).toBe(1);
+          expect(theOnlyArticle.topic).toEqual("cats");
+          expect(theOnlyArticle.title).toEqual(
+            "UNCOVERED: catspiracy to bring down democracy"
+          );
+          expect(theOnlyArticle.author).toEqual("rogersop");
+          expect(theOnlyArticle.body).toEqual(
+            "Bastet walks amongst us, and the cats are taking arms!"
+          );
+          expect(theOnlyArticle.article_img_url).toEqual(
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+          );
+          expect(theOnlyArticle).toHaveProperty("created_at");
+        });
+    });
+    test("should return a Status Code: 404 if the specified (topic) does not exist", () => {
+      return supertest(app)
+        .get("/api/articles")
+        .query({ topic: "semih8" })
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe("(topic) does not exist.");
+        });
+    });
+    test("should return a Status Code: 200 and an empty array when no article for the existing topic", () => {
+      return supertest(app)
+        .get("/api/articles")
+        .query({ topic: "paper" })
+        .expect(200)
+        .then((response) => {
+          expect(response.body).toEqual([]);
         });
     });
   });
@@ -207,55 +249,6 @@ describe("GET Tests", () => {
             expect(users).toHaveProperty("name");
             expect(users).toHaveProperty("avatar_url");
           });
-        });
-    });
-  });
-  describe("GET Articles By Topic Query", () => {
-    test("should return article(s) by specified (topic) with correct structure", () => {
-      return supertest(app)
-        .get("/api/articles/topic")
-        .query({ topic: "cats" })
-        .expect(200)
-        .then((response) => {
-          const theOnlyTopic = response.body[0];
-          expect(response.body.length).toBe(1);
-          expect(theOnlyTopic.title).toEqual(
-            "UNCOVERED: catspiracy to bring down democracy"
-          );
-          expect(theOnlyTopic.author).toEqual("rogersop");
-          expect(theOnlyTopic.body).toEqual(
-            "Bastet walks amongst us, and the cats are taking arms!"
-          );
-          expect(theOnlyTopic.article_img_url).toEqual(
-            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
-          );
-          expect(theOnlyTopic).toHaveProperty("created_at");
-        });
-    });
-    test("should return a Status Code: 404 if the specified (topic) does not exist", () => {
-      return supertest(app)
-        .get("/api/articles/topic")
-        .query({ topic: "semih8" })
-        .expect(404)
-        .then((response) => {
-          expect(response.body.msg).toBe("(topic) does not exist.");
-        });
-    });
-    test("should return a Status Code: 400 if (topic) query parameter is not given", () => {
-      return supertest(app)
-        .get("/api/articles/topic")
-        .expect(400)
-        .then((response) => {
-          expect(response.body.msg).toBe("Missing (topic) query parameter.");
-        });
-    });
-    test("should return a Status Code: 200 and an empty array when no article for the existing topic", () => {
-      return supertest(app)
-        .get("/api/articles/topic")
-        .query({ topic: "paper" })
-        .expect(200)
-        .then((response) => {
-          expect(response.body).toEqual([]);
         });
     });
   });
