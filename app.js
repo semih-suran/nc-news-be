@@ -7,6 +7,7 @@ const {
   getArticleById,
   getArticlesByLifo,
   patchArticleVotes,
+  getArticlesByQuery,
 } = require("./controllers/articles.controller");
 const {
   getCommentsByArticleIdLifo,
@@ -19,11 +20,13 @@ const {
   serverErrorHandler,
 } = require("./error-handlers");
 
-const {getAllUsers} = require("./controllers/users.controller")
+const { getAllUsers } = require("./controllers/users.controller");
 
 app.get("/api/topics", getAllTopics);
 
 app.get("/api/endpoints", getAllEndpoints);
+
+app.get("/api/articles/topic", getArticlesByQuery);
 
 app.get("/api/articles", getArticlesByLifo);
 

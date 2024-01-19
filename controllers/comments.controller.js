@@ -55,7 +55,7 @@ const deleteComment = (req, res, next) => {
   checkIfCommentExists(commentId)
     .then((exists) => {
       if (!exists) {
-        return res.status(404).send({ msg: "Non-existent Comment ID" });
+        return Promise.reject({ status: 404, msg: "Non-existent Comment ID" });
       }
       return deleteCommentByCommentId(commentId);
     })

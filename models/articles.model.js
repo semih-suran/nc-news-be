@@ -73,10 +73,20 @@ const patchVotes = (articleId, inc_votes) => {
         [articleId, inc_votes]
       );
     })
-    .then((result) => result.rows)
-    .catch((error) => {
-      throw error;
-    });
+    .then((result) => result.rows);
+};
+
+const fetchArticlesByTopic = async (topic) => {
+  const topicResult = await db.query(
+    `SELECT * FROM topics WHERE slug = $1;`,
+    [topic]
+  );
+  if (topicResult.rows.length === 0) {
+    throw { status: 404, msg: "(topic) does not exist." };
+  }
+  return db
+    .query(`SELECT * FROM articles WHERE topic = $1`, [topic])
+    .then((result) => result.rows);
 };
 
 module.exports = {
@@ -84,4 +94,5 @@ module.exports = {
   fetchArticlesWithCommentCount,
   patchVotes,
   checkIfArticleExists,
+  fetchArticlesByTopic,
 };
