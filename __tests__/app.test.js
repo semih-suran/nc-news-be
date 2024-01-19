@@ -14,7 +14,12 @@ afterAll(() => {
 });
 
 describe("GET Tests", () => {
-  describe("GET ALL topics", () => {
+  describe("GET Bad Path Tests", () => {
+    test("should return a Status Code : 404 when invalid path given", () => {
+      return supertest(app).get("/api/semih8").expect(404);
+    });
+  });
+  describe("GET ALL Topics", () => {
     test("should return a Status Code : 200", () => {
       return supertest(app).get("/api/topics").expect(200);
     });
@@ -31,9 +36,6 @@ describe("GET Tests", () => {
         .then((response) => {
           expect(response.body.topics.length).toBe(3);
         });
-    });
-    test("should return a Status Code : 404 when invalid", () => {
-      return supertest(app).get("/api/meow").expect(404);
     });
   });
   describe("GET ALL Endpoints", () => {
@@ -67,7 +69,7 @@ describe("GET Tests", () => {
         });
     });
   });
-  describe("GET Articles by ID", () => {
+  describe("GET Articles By ID", () => {
     test("should return a Status Code: 200 for a successful request", () => {
       return supertest(app).get("/api/articles/5").expect(200);
     });
@@ -106,7 +108,7 @@ describe("GET Tests", () => {
         });
     });
   });
-  describe("GET Articles in Descending Order by Date", () => {
+  describe("GET Articles In Descending Order By Date", () => {
     test("should return all articles in descending order", () => {
       return supertest(app)
         .get("/api/articles")
@@ -174,7 +176,7 @@ describe("GET Tests", () => {
     });
     test("should return a Status Code: 400 if passed (article_id) is not a number", () => {
       return supertest(app)
-        .get("/api/articles/semih5/comments")
+        .get("/api/articles/semih8/comments")
         .expect(400)
         .then((response) => {
           expect(response.body.msg).toBe(
@@ -186,14 +188,6 @@ describe("GET Tests", () => {
   describe("GET Users", () => {
     test("should return a Status Code : 200", () => {
       return supertest(app).get("/api/users").expect(200);
-    });
-    test("should return an array of users", () => {
-      return supertest(app)
-        .get("/api/users")
-        .expect(200)
-        .then((response) => {
-          expect(response.body.users).toBeInstanceOf(Array);
-        });
     });
     test("should have all 4 users", () => {
       return supertest(app)
@@ -215,8 +209,54 @@ describe("GET Tests", () => {
           });
         });
     });
-    test("should return a Status Code : 404 when invalid", () => {
-      return supertest(app).get("/api/8_not_valid_name_8").expect(404);
+  });
+  describe("GET Articles By Topic Query", () => {
+    test("should return article(s) by specified (topic) with correct structure", () => {
+      return supertest(app)
+        .get("/api/articles/topic")
+        .query({ topic: "cats" })
+        .expect(200)
+        .then((response) => {
+          const theOnlyTopic = response.body[0];
+          expect(response.body.length).toBe(1);
+          expect(theOnlyTopic.title).toEqual(
+            "UNCOVERED: catspiracy to bring down democracy"
+          );
+          expect(theOnlyTopic.author).toEqual("rogersop");
+          expect(theOnlyTopic.body).toEqual(
+            "Bastet walks amongst us, and the cats are taking arms!"
+          );
+          expect(theOnlyTopic.article_img_url).toEqual(
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+          );
+          expect(theOnlyTopic).toHaveProperty("created_at");
+        });
+    });
+    test("should return a Status Code: 404 if the specified (topic) does not exist", () => {
+      return supertest(app)
+        .get("/api/articles/topic")
+        .query({ topic: "semih8" })
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe("(topic) does not exist.");
+        });
+    });
+    test("should return a Status Code: 400 if (topic) query parameter is not given", () => {
+      return supertest(app)
+        .get("/api/articles/topic")
+        .expect(400)
+        .then((response) => {
+          expect(response.body.msg).toBe("Missing (topic) query parameter.");
+        });
+    });
+    test("should return a Status Code: 200 and an empty array when no article for the existing topic", () => {
+      return supertest(app)
+        .get("/api/articles/topic")
+        .query({ topic: "paper" })
+        .expect(200)
+        .then((response) => {
+          expect(response.body).toEqual([]);
+        });
     });
   });
 });
@@ -262,9 +302,11 @@ describe("POST Tests", () => {
       return supertest(app)
         .post("/api/articles/1/comments")
         .send(bodyOnly)
-        .expect(404)
+        .expect(400)
         .then((response) => {
-          expect(response.body.msg).toBe("(username) does not exist.");
+          expect(response.body.msg).toBe(
+            "(username) and (body) are required fields."
+          );
         });
     });
     test("should return a Status Code: 404 if (username) key given but does not exist", () => {
@@ -415,7 +457,7 @@ describe("DELETE Tests", () => {
     });
     test("should return a Status Code: 400 when an invalid (comment_id) format given", () => {
       return supertest(app)
-        .delete("/api/comments/semih7")
+        .delete("/api/comments/semih8")
         .expect(400)
         .then((response) => {
           expect(response.body.msg).toBe(

@@ -2,6 +2,7 @@ const {
   fetchArticleById,
   fetchArticlesWithCommentCount,
   patchVotes,
+  fetchArticlesByTopic,
 } = require("../models/articles.model");
 
 const { checkIfArticleExists } = require("../models/articles.model");
@@ -49,4 +50,22 @@ const patchArticleVotes = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getArticleById, getArticlesByLifo, patchArticleVotes };
+const getArticlesByQuery = (req, res, next) => {
+  const query = req.query.topic;
+
+  if (!query) {
+    return next({ status: 400, msg: "Missing (topic) query parameter." });
+  }
+  fetchArticlesByTopic(query)
+    .then((topics) => {
+      res.send(topics);
+    })
+    .catch(next);
+};
+
+module.exports = {
+  getArticleById,
+  getArticlesByLifo,
+  patchArticleVotes,
+  getArticlesByQuery,
+};

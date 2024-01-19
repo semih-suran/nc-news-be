@@ -9,31 +9,27 @@ const fetchCommentsByArticleId = (articleId) => {
     .then((result) => result.rows);
 };
 
-const addCommentToArticle = (articleId, username, body) => {
-  return db
-    .query(`SELECT * FROM users WHERE username = $1;`, [username])
-    .then((userResult) => {
-      if (userResult.rows.length === 0) {
-        return Promise.reject({
-          status: 404,
-          msg: "(username) does not exist.",
-        });
-      }
-      return db.query(
-        `INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3) RETURNING *;`,
-        [articleId, username, body]
-      );
-    })
-    .then((result) => result.rows[0])
-    .catch((error) => {
-      if (error.code === "23502") {
-        return Promise.reject({
-          status: 400,
-          msg: "(username) and (body) are required fields.",
-        });
-      }
-      throw error;
-    });
+const addCommentToArticle = async (articleId, username, body) => {
+  const userResult = await db.query(
+    `SELECT * FROM users WHERE username = $1;`,
+    [username]
+  );
+  if (!username || !body) {
+    throw {
+      status: 400,
+      msg: "(username) and (body) are required fields.",
+    };
+  }
+  if (userResult.rows.length === 0) {
+    throw { status: 404, msg: "(username) does not exist." };
+  }
+
+  const result = await db.query(
+    `INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3) RETURNING *;`,
+    [articleId, username, body]
+  );
+
+  return result.rows[0];
 };
 
 const checkIfCommentExists = (commentId) => {
@@ -45,16 +41,22 @@ const checkIfCommentExists = (commentId) => {
   }
   return db
     .query("SELECT * FROM comments WHERE comment_id = $1", [commentId])
-    .then((result) => result.rows.length > 0);
+    .then((result) => result.rows.length > 0)
+    .then((exists) => {
+      if (!exists) {
+        return Promise.reject({
+          status: 404,
+          msg: "Non-existent Comment ID",
+        });
+      }
+      return exists;
+    });
 };
 
 const deleteCommentByCommentId = (commentId) => {
   return db
     .query("DELETE FROM comments WHERE comment_id = $1;", [commentId])
-    .then((result) => result.rows)
-    .catch((error) => {
-      throw error;
-    });
+    .then((result) => result.rows);
 };
 
 module.exports = {
