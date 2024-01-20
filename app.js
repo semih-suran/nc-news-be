@@ -5,12 +5,12 @@ const getAllTopics = require("./controllers/topics.controller");
 const getAllEndpoints = require("./controllers/endpoints.controller");
 const {
   getArticleById,
-  getArticlesByLifo,
+  getAllArticlesByLifo,
   patchArticleVotes,
-  getArticlesByQuery,
+  getArticlesByTopicQuery,
 } = require("./controllers/articles.controller");
 const {
-  getAllComments,
+  getAllCommentsByLifo,
   getCommentsByArticleIdLifo,
   postCommentToArticle,
   deleteComment,
@@ -23,15 +23,15 @@ const {
 
 const { getAllUsers } = require("./controllers/users.controller");
 
+app.get("/api", getAllEndpoints);
+
 app.get("/api/topics", getAllTopics);
 
-app.get("/api/comments", getAllComments)
+app.get("/api/comments", getAllCommentsByLifo)
 
-app.get("/api/endpoints", getAllEndpoints);
+app.get("/api/articles", getArticlesByTopicQuery);
 
-app.get("/api/articles", getArticlesByQuery);
-
-app.get("/api/articles", getArticlesByLifo);
+app.get("/api/articles", getAllArticlesByLifo);
 
 app.get("/api/articles/:article_id", getArticleById);
 

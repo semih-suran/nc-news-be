@@ -1,5 +1,5 @@
 const {
-  fetchAllComments,
+  fetchAllCommentsByLifo,
   fetchCommentsByArticleId,
   addCommentToArticle,
   deleteCommentByCommentId,
@@ -7,8 +7,8 @@ const {
 } = require("../models/comments.model");
 const { checkIfArticleExists } = require("../models/articles.model");
 
-const getAllComments = (req, res, next) => {
-  fetchAllComments()
+const getAllCommentsByLifo = (req, res, next) => {
+  fetchAllCommentsByLifo()
     .then((comments) => {
       res.status(200).send({ comments });
     })
@@ -77,7 +77,7 @@ const deleteComment = (req, res, next) => {
 };
 
 module.exports = {
-  getAllComments,
+  getAllCommentsByLifo,
   getCommentsByArticleIdLifo,
   postCommentToArticle,
   deleteComment,
