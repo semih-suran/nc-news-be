@@ -1,6 +1,6 @@
-## BE Project - NC News API ##
+## BE Project - NC News API
 
-# Hosted Version
+**Hosted Version**
 
 The project is hosted at **[https://thenews-lhhv.onrender.com/api/]**
 
@@ -11,65 +11,65 @@ This project is a web API developed for managing various aspects of a content pl
 
 # FEATURES #
 
-# Get All Endpoints
-<Endpoint: /api
+**Get All Endpoints**
+Endpoint: /api
 Description: Provides a JSON representation of all available endpoints in the API.
 
-# Get All Topics
-<Endpoint: /api/topics
+**Get All Topics**
+Endpoint: /api/topics
 Description: Retrieves an array of all available topics.
 
-# Get All Articles (LIFO)
-<Endpoint: /api/articles
+**Get All Articles (LIFO)**
+Endpoint: /api/articles
 Description: Retrieves all articles using Last In, First Out (LIFO) order.
 
-# Get All Comments (LIFO)
-<Endpoint: /api/comments
+**Get All Comments (LIFO)**
+Endpoint: /api/comments
 Description: Retrieves all comments using LIFO order
 
-# Get Articles by Topic Query
-<Endpoint: /api/articles
+**Get Articles by Topic Query**
+Endpoint: /api/articles
 Description: Retrieves an array of articles based on specified topic query.
 
-# Get Article by ID
-<Endpoint: /api/articles/:article_id
+**Get Article by ID**
+Endpoint: /api/articles/:article_id
 Description: Retrieves a specific article by its ID.
 
-# Get Comments by Article ID (LIFO)
-<Endpoint: /api/articles/:article_id/comments
+**Get Comments by Article ID (LIFO)**
+Endpoint: /api/articles/:article_id/comments
 Description: Retrieves comments for a specific article using LIFO order.
 
-# Get All Users
-<Endpoint: /api/users
+**Get All Users**
+Endpoint: /api/users
 Description: Retrieves information about all users.
 
-# Post Comment to Article
-<Endpoint: /api/articles/:article_id/comments
+**Post Comment to Article**
+Endpoint: /api/articles/:article_id/comments
 Description: Posts a new comment to a specific article.
 
-# Patch Article Votes
-<Endpoint: /api/articles/:article_id
+**Patch Article Votes**
+Endpoint: /api/articles/:article_id
 Description: Updates the vote count for a specific article.
 
-# Delete Comment
-<Endpoint: /api/comments/:comment_id
+**Delete Comment**
+Endpoint: /api/comments/:comment_id
 Description: Deletes a specific comment.
 
 
 # SETUP #
 
-# Minimum Versions
+**Minimum Versions**
 - Node.js: v12.0.0 or higher
 - Postgres: v11.0.0 or higher
 
 **Clone the repository:**
 - Use the command below which includes the link for this repository:
 
-> git clone https://github.com/semih-suran/theNews.git
+>> git clone https://github.com/semih-suran/theNews.git
 
 Then follow these steps to get the project up and running locally:
 
-1. Environment Variables
+1. **Environment Variables**
 - In the root directory of your project create the following two files locally to be able to connect the relevant database:
 
 >> .env.development
@@ -83,7 +83,7 @@ PGDATABASE=your_development_database
 <For .env.test:
 PGDATABASE=your_test_database
 
-2. Install Dependencies 
+2. **Install Dependencies**
 - Make sure you have the required dependencies installed. You can install them by running:
 
 >> npm init -y
@@ -100,7 +100,7 @@ PGDATABASE=your_test_database
   ]
 }
 
-3. Seed Database
+3. **Seed Database**
 
 - Use the following command to drop and re-create your databases.
 
@@ -110,18 +110,20 @@ PGDATABASE=your_test_database
 
 >> npm run seed
 
-4. Run Tests
+4. **Run Tests**
 - To execute the tests, use the following command:
 
 >> npm test
 
 This will run the Jest tests and ensure that your application is functioning as expected.
 
-5. Start the Development Server
+5. **Start the Development Server**
 - To start, use the command below:
 
->> npm start  (default is http://localhost:8080)
+>> npm start
+
+(default is http://localhost:8080)
 
 This will launch your API locally, and you can access it at the specified port.
 
-**<README Version: #1.0>**
+**<README Version: #1.1>**
