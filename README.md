@@ -1,5 +1,7 @@
 # Northcoders News API
 
+https://thenews-lhhv.onrender.com/api/endpoints
+
 1- Create the following two files locally to be able to connect the relevant database:
     ->    .env.development
     ->    .env.test
