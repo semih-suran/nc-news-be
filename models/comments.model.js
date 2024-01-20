@@ -1,7 +1,16 @@
 const db = require("../db/connection");
 
-const fetchAllComments = () => {
-  return db.query("SELECT * FROM comments").then((result) => result.rows);
+const fetchAllCommentsByLifo = () => {
+  return db
+    .query(
+      `
+      SELECT * FROM
+      comments
+    ORDER BY
+      created_at DESC;
+  `
+    )
+    .then((result) => result.rows);
 };
 
 const fetchCommentsByArticleId = (articleId) => {
@@ -64,7 +73,7 @@ const deleteCommentByCommentId = (commentId) => {
 };
 
 module.exports = {
-  fetchAllComments,
+  fetchAllCommentsByLifo,
   fetchCommentsByArticleId,
   addCommentToArticle,
   deleteCommentByCommentId,

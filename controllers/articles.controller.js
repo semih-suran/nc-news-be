@@ -20,7 +20,7 @@ const getArticleById = (req, res, next) => {
     .catch(next);
 };
 
-const getArticlesByLifo = (req, res, next) => {
+const getAllArticlesByLifo = (req, res, next) => {
   fetchArticlesWithCommentCount()
     .then((articles) => {
       res.send(articles);
@@ -50,10 +50,10 @@ const patchArticleVotes = (req, res, next) => {
     .catch(next);
 };
 
-const getArticlesByQuery = (req, res, next) => {
+const getArticlesByTopicQuery = (req, res, next) => {
   const query = req.query.topic;
   if (!query) {
-    return getArticlesByLifo(req, res, next);
+    return getAllArticlesByLifo(req, res, next);
   }
   fetchArticlesByTopic(query)
     .then((topics) => {
@@ -64,7 +64,7 @@ const getArticlesByQuery = (req, res, next) => {
 
 module.exports = {
   getArticleById,
-  getArticlesByLifo,
+  getAllArticlesByLifo,
   patchArticleVotes,
-  getArticlesByQuery,
+  getArticlesByTopicQuery,
 };

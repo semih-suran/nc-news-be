@@ -21,11 +21,11 @@ describe("GET Tests", () => {
   });
   describe("GET ALL Endpoints", () => {
     test("should return a Status Code : 200", () => {
-      return supertest(app).get("/api/endpoints").expect(200);
+      return supertest(app).get("/api").expect(200);
     });
     test("should return a non-empty object", () => {
       return supertest(app)
-        .get("/api/endpoints")
+        .get("/api")
         .then((response) => {
           expect(response.body).toBeInstanceOf(Object);
           expect(Object.keys(response.body).length).toBeGreaterThan(0);
@@ -33,7 +33,7 @@ describe("GET Tests", () => {
     });
     test("should include a specific endpoint", () => {
       return supertest(app)
-        .get("/api/endpoints")
+        .get("/api")
         .then((response) => {
           expect(response.body).toHaveProperty("GET /api/articles");
         });
@@ -44,7 +44,7 @@ describe("GET Tests", () => {
         fs.readFileSync(endpointsPath, "utf-8")
       );
       return supertest(app)
-        .get("/api/endpoints")
+        .get("/api")
         .then((response) => {
           expect(response.body).toEqual(expectedEndpoints);
         });
@@ -56,7 +56,8 @@ describe("GET Tests", () => {
     });
     test("should return all topics with the correct structure", () => {
       return supertest(app)
-        .get("/api/topics").expect(200)
+        .get("/api/topics")
+        .expect(200)
         .then((response) => {
           const topics = response.body.topics;
           topics.forEach((topic) => {
@@ -79,7 +80,8 @@ describe("GET Tests", () => {
     });
     test("should return all comments with the correct structure", () => {
       return supertest(app)
-        .get("/api/comments").expect(200)
+        .get("/api/comments")
+        .expect(200)
         .then((response) => {
           const comments = response.body.comments;
           comments.forEach((comment) => {
@@ -92,9 +94,19 @@ describe("GET Tests", () => {
           });
         });
     });
+    test("should return all comments in descending order", () => {
+      return supertest(app)
+        .get("/api/comments")
+        .expect(200)
+        .then((response) => {
+          const comments = response.body.comments;
+          expect(comments).toBeSortedBy("created_at", { descending: true });
+        });
+    });
     test("should have all 18 comments", () => {
       return supertest(app)
         .get("/api/comments")
+        .expect(200)
         .then((response) => {
           expect(response.body.comments.length).toBe(18);
         });
@@ -149,7 +161,6 @@ describe("GET Tests", () => {
           expect(articles).toBeSortedBy("created_at", { descending: true });
         });
     });
-
     test("should NOT have (body) property but should have the correct structure", () => {
       return supertest(app)
         .get("/api/articles")
