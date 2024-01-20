@@ -1,10 +1,19 @@
 const {
+  fetchAllComments,
   fetchCommentsByArticleId,
   addCommentToArticle,
   deleteCommentByCommentId,
   checkIfCommentExists,
 } = require("../models/comments.model");
 const { checkIfArticleExists } = require("../models/articles.model");
+
+const getAllComments = (req, res, next) => {
+  fetchAllComments()
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
+    .catch(next);
+};
 
 const getCommentsByArticleIdLifo = async (req, res, next) => {
   const articleId = req.params.article_id;
@@ -68,6 +77,7 @@ const deleteComment = (req, res, next) => {
 };
 
 module.exports = {
+  getAllComments,
   getCommentsByArticleIdLifo,
   postCommentToArticle,
   deleteComment,

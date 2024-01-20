@@ -10,6 +10,7 @@ const {
   getArticlesByQuery,
 } = require("./controllers/articles.controller");
 const {
+  getAllComments,
   getCommentsByArticleIdLifo,
   postCommentToArticle,
   deleteComment,
@@ -23,6 +24,8 @@ const {
 const { getAllUsers } = require("./controllers/users.controller");
 
 app.get("/api/topics", getAllTopics);
+
+app.get("/api/comments", getAllComments)
 
 app.get("/api/endpoints", getAllEndpoints);
 

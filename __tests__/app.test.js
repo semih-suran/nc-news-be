@@ -19,25 +19,6 @@ describe("GET Tests", () => {
       return supertest(app).get("/api/semih8").expect(404);
     });
   });
-  describe("GET ALL Topics", () => {
-    test("should return a Status Code : 200", () => {
-      return supertest(app).get("/api/topics").expect(200);
-    });
-    test("should return an array of topics", () => {
-      return supertest(app)
-        .get("/api/topics")
-        .then((response) => {
-          expect(response.body.topics).toBeInstanceOf(Array);
-        });
-    });
-    test("should have all 3 topics", () => {
-      return supertest(app)
-        .get("/api/topics")
-        .then((response) => {
-          expect(response.body.topics.length).toBe(3);
-        });
-    });
-  });
   describe("GET ALL Endpoints", () => {
     test("should return a Status Code : 200", () => {
       return supertest(app).get("/api/endpoints").expect(200);
@@ -66,6 +47,56 @@ describe("GET Tests", () => {
         .get("/api/endpoints")
         .then((response) => {
           expect(response.body).toEqual(expectedEndpoints);
+        });
+    });
+  });
+  describe("GET ALL Topics", () => {
+    test("should return a Status Code : 200", () => {
+      return supertest(app).get("/api/topics").expect(200);
+    });
+    test("should return all topics with the correct structure", () => {
+      return supertest(app)
+        .get("/api/topics").expect(200)
+        .then((response) => {
+          const topics = response.body.topics;
+          topics.forEach((topic) => {
+            expect(topic).toHaveProperty("slug");
+            expect(topic).toHaveProperty("description");
+          });
+        });
+    });
+    test("should have all 3 topics", () => {
+      return supertest(app)
+        .get("/api/topics")
+        .then((response) => {
+          expect(response.body.topics.length).toBe(3);
+        });
+    });
+  });
+  describe("GET ALL Comments", () => {
+    test("should return a Status Code : 200", () => {
+      return supertest(app).get("/api/comments").expect(200);
+    });
+    test("should return all comments with the correct structure", () => {
+      return supertest(app)
+        .get("/api/comments").expect(200)
+        .then((response) => {
+          const comments = response.body.comments;
+          comments.forEach((comment) => {
+            expect(comment).toHaveProperty("comment_id");
+            expect(comment).toHaveProperty("body");
+            expect(comment).toHaveProperty("article_id");
+            expect(comment).toHaveProperty("author");
+            expect(comment).toHaveProperty("votes");
+            expect(comment).toHaveProperty("created_at");
+          });
+        });
+    });
+    test("should have all 18 comments", () => {
+      return supertest(app)
+        .get("/api/comments")
+        .then((response) => {
+          expect(response.body.comments.length).toBe(18);
         });
     });
   });
