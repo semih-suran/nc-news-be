@@ -5,3 +5,4 @@ const fetchAllUsers = () => {
 };
 
 module.exports = { fetchAllUsers };
+

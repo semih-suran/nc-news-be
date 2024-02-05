@@ -62,7 +62,39 @@ const getArticlesByTopicQuery = (req, res, next) => {
     .catch(next);
 };
 
+const getAllArticlesBySortQuery = (req, res, next) => {
+  const { sort_by = "created_at", order = "desc" } = req.query;
+  const validColumns = ["created_at", "author", "title", "votes", "comment_count", "topic", "article_id" ];
+  const validOrders = ["asc", "desc"]
+
+  if (!validOrders.includes(order)) {
+    return res.status(400).send({ msg: "Invalid order request." });
+  }
+
+  if (!validColumns.includes(sort_by)) {
+    return res.status(400).send({ msg: "Invalid sort_by column." });
+  }
+
+  fetchArticlesWithCommentCount()
+    .then((articles) => {
+      articles.sort((a, b) => {
+        const aValue = a[sort_by];
+        const bValue = b[sort_by];
+
+        if (order.toLowerCase() === "asc") {
+          return aValue < bValue ? -1 : 1;
+        } else {
+          return bValue < aValue ? -1 : 1;
+        }
+      });
+      console.log('OrderBy used articles >>>>',articles)
+      res.send(articles);
+    })
+    .catch(next);
+};
+
 module.exports = {
+  getAllArticlesBySortQuery,
   getArticleById,
   getAllArticlesByLifo,
   patchArticleVotes,

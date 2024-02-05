@@ -112,116 +112,144 @@ describe("GET Tests", () => {
         });
     });
   });
-  describe("GET Articles By ID", () => {
-    test("should return a Status Code: 200 for a successful request", () => {
-      return supertest(app).get("/api/articles/5").expect(200);
-    });
-    test("should return a Status Code: 404 for a non-existent (article_id)", () => {
-      return supertest(app)
-        .get("/api/articles/888")
-        .expect(404)
-        .then((response) => {
-          expect(response.body.msg).toBe("Article Not Found");
-        });
-    });
-    test("should return a Status Code: 400 if passed (article_id) is not a number", () => {
-      return supertest(app)
-        .get("/api/articles/semih8")
-        .expect(400)
-        .then((response) => {
-          expect(response.body.msg).toBe(
-            "Invalid (article_id) Format. Must Be a Number."
-          );
-        });
-    });
-    test("should return the specified article with the correct structure", () => {
-      return supertest(app)
-        .get("/api/articles/8")
-        .expect(200)
-        .then((response) => {
-          const article = response.body[0];
-          expect(article.article_id).toBe(8);
-          expect(article).toHaveProperty("title");
-          expect(article).toHaveProperty("topic");
-          expect(article).toHaveProperty("author");
-          expect(article).toHaveProperty("created_at");
-          expect(article).toHaveProperty("votes");
-          expect(article).toHaveProperty("article_img_url");
-          expect(article).toHaveProperty("comment_count");
-        });
-    });
-  });
-  describe("GET Articles In Descending Order By Date", () => {
-    test("should return all articles in descending order", () => {
-      return supertest(app)
-        .get("/api/articles")
-        .expect(200)
-        .then((response) => {
-          const articles = response.body;
-          expect(articles).toBeSortedBy("created_at", { descending: true });
-        });
-    });
-    test("should NOT have (body) property but should have the correct structure", () => {
-      return supertest(app)
-        .get("/api/articles")
-        .expect(200)
-        .then((response) => {
-          const articles = response.body;
-          expect(articles.length === 13).toBe(true);
-          articles.forEach((article) => {
-            expect(article).not.toHaveProperty("body");
-            expect(article).toHaveProperty("author");
+  describe("GET Articles Tests", () => {
+    describe("GET Articles By ID", () => {
+      test("should return a Status Code: 200 for a successful request", () => {
+        return supertest(app).get("/api/articles/5").expect(200);
+      });
+      test("should return a Status Code: 404 for a non-existent (article_id)", () => {
+        return supertest(app)
+          .get("/api/articles/888")
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe("Article Not Found");
+          });
+      });
+      test("should return a Status Code: 400 if passed (article_id) is not a number", () => {
+        return supertest(app)
+          .get("/api/articles/semih8")
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe(
+              "Invalid (article_id) Format. Must Be a Number."
+            );
+          });
+      });
+      test("should return the specified article with the correct structure", () => {
+        return supertest(app)
+          .get("/api/articles/8")
+          .expect(200)
+          .then((response) => {
+            const article = response.body[0];
+            expect(article.article_id).toBe(8);
             expect(article).toHaveProperty("title");
-            expect(article).toHaveProperty("article_id");
             expect(article).toHaveProperty("topic");
+            expect(article).toHaveProperty("author");
             expect(article).toHaveProperty("created_at");
             expect(article).toHaveProperty("votes");
             expect(article).toHaveProperty("article_img_url");
             expect(article).toHaveProperty("comment_count");
           });
-        });
+      });
     });
-  });
-  describe("GET Articles By Topic Query", () => {
-    test("should return article(s) by specified (topic) with correct structure", () => {
-      return supertest(app)
-        .get("/api/articles")
-        .query({ topic: "cats" })
-        .expect(200)
-        .then((response) => {
-          const theOnlyArticle = response.body[0];
-          expect(response.body.length).toBe(1);
-          expect(theOnlyArticle.topic).toEqual("cats");
-          expect(theOnlyArticle.title).toEqual(
-            "UNCOVERED: catspiracy to bring down democracy"
-          );
-          expect(theOnlyArticle.author).toEqual("rogersop");
-          expect(theOnlyArticle.body).toEqual(
-            "Bastet walks amongst us, and the cats are taking arms!"
-          );
-          expect(theOnlyArticle.article_img_url).toEqual(
-            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
-          );
-          expect(theOnlyArticle).toHaveProperty("created_at");
-        });
+    describe("GET Articles In Descending Order By Date", () => {
+      test("should return all articles in descending order", () => {
+        return supertest(app)
+          .get("/api/articles")
+          .expect(200)
+          .then((response) => {
+            const articles = response.body;
+            expect(articles).toBeSortedBy("created_at", { descending: true });
+          });
+      });
+      test("should NOT have (body) property but should have the correct structure", () => {
+        return supertest(app)
+          .get("/api/articles")
+          .expect(200)
+          .then((response) => {
+            const articles = response.body;
+            expect(articles.length === 13).toBe(true);
+            articles.forEach((article) => {
+              expect(article).not.toHaveProperty("body");
+              expect(article).toHaveProperty("author");
+              expect(article).toHaveProperty("title");
+              expect(article).toHaveProperty("article_id");
+              expect(article).toHaveProperty("topic");
+              expect(article).toHaveProperty("created_at");
+              expect(article).toHaveProperty("votes");
+              expect(article).toHaveProperty("article_img_url");
+              expect(article).toHaveProperty("comment_count");
+            });
+          });
+      });
     });
-    test("should return a Status Code: 404 if the specified (topic) does not exist", () => {
-      return supertest(app)
-        .get("/api/articles")
-        .query({ topic: "semih8" })
-        .expect(404)
-        .then((response) => {
-          expect(response.body.msg).toBe("(topic) does not exist.");
+    describe("GET Articles By Queries", () => {
+      describe("GET Articles In Order By Sort Querie", () => {
+        test("should return article(s) by specified (sorting querie) with correct structure", () => {
+          return supertest(app)
+            .get("/api/articles")
+            .query({ sort_by: "article_id", order: "asc" })
+            .expect(200)
+            .then((response) => {
+              const sortedArticles = response.body;
+              console.log("response.body in TEST >>>", response.body);
+              console.log("response.body[0] in TEST >>>", response.body[0]);
+              expect(response.body.length).toBe(13);
+              sortedArticles.forEach((sortedArticle) => {
+                expect(sortedArticle).toHaveProperty("title");
+                expect(sortedArticle).toHaveProperty("created_at");
+                expect(sortedArticle).toHaveProperty("author");
+                expect(sortedArticle).toHaveProperty("article_id");
+                expect(sortedArticle).toHaveProperty("topic");
+                expect(sortedArticle).toHaveProperty("votes");
+                expect(sortedArticle).toHaveProperty("comment_count");
+                expect(sortedArticle).toHaveProperty("article_img_url");
+              });
+            });
         });
-    });
-    test("should return a Status Code: 200 and an empty array when no article for the existing topic", () => {
-      return supertest(app)
-        .get("/api/articles")
-        .query({ topic: "paper" })
-        .expect(200)
-        .then((response) => {
-          expect(response.body).toEqual([]);
+      });
+      describe("GET Articles By Topic Query", () => {
+        test("should return article(s) by specified (topic) with correct structure", () => {
+          return supertest(app)
+            .get("/api/articles")
+            .query({ topic: "cats" })
+            .expect(200)
+            .then((response) => {
+              const theOnlyArticle = response.body[0];
+              expect(response.body.length).toBe(1);
+              expect(theOnlyArticle.topic).toEqual("cats");
+              expect(theOnlyArticle.title).toEqual(
+                "UNCOVERED: catspiracy to bring down democracy"
+              );
+              expect(theOnlyArticle.author).toEqual("rogersop");
+              expect(theOnlyArticle.body).toEqual(
+                "Bastet walks amongst us, and the cats are taking arms!"
+              );
+              expect(theOnlyArticle.article_img_url).toEqual(
+                "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+              );
+              expect(theOnlyArticle).toHaveProperty("created_at");
+            });
         });
+        test("should return a Status Code: 404 if the specified (topic) does not exist", () => {
+          return supertest(app)
+            .get("/api/articles")
+            .query({ topic: "semih8" })
+            .expect(404)
+            .then((response) => {
+              expect(response.body.msg).toBe("(topic) does not exist.");
+            });
+        });
+        test("should return a Status Code: 200 and an empty array when no article for the existing topic", () => {
+          return supertest(app)
+            .get("/api/articles")
+            .query({ topic: "paper" })
+            .expect(200)
+            .then((response) => {
+              expect(response.body).toEqual([]);
+            });
+        });
+      });
     });
   });
   describe("GET Comments By Article ID", () => {
@@ -502,3 +530,22 @@ describe("DELETE Tests", () => {
     });
   });
 });
+
+// test("should return a Status Code: 404 if the specified (topic) does not exist", () => {
+//   return supertest(app)
+//     .get("/api/articles")
+//     .query({ topic: "semih8" })
+//     .expect(404)
+//     .then((response) => {
+//       expect(response.body.msg).toBe("(topic) does not exist.");
+//     });
+// });
+// test("should return a Status Code: 200 and an empty array when no article for the existing topic", () => {
+//   return supertest(app)
+//     .get("/api/articles")
+//     .query({ topic: "paper" })
+//     .expect(200)
+//     .then((response) => {
+//       expect(response.body).toEqual([]);
+//     });
+// });

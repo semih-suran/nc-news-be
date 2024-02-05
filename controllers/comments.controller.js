@@ -75,7 +75,6 @@ const deleteComment = (req, res, next) => {
       next(error);
     });
 };
-
 module.exports = {
   getAllCommentsByLifo,
   getCommentsByArticleIdLifo,

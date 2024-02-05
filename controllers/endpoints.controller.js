@@ -10,4 +10,4 @@ const getAllEndpoints = (req, res, next) => {
   }
 };
 
-module.exports = getAllEndpoints;
+module.exports = {getAllEndpoints};
