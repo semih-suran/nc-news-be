@@ -1,10 +1,10 @@
 const express = require("express");
-const cors = require('cors');
+const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors());
-const {getAllTopics} = require("./controllers/topics.controller");
-const {getAllEndpoints} = require("./controllers/endpoints.controller");
+const { getAllTopics } = require("./controllers/topics.controller");
+const { getAllEndpoints } = require("./controllers/endpoints.controller");
 const {
   getAllArticlesBySortQuery,
   getArticleById,
