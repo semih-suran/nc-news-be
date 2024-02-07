@@ -23,3 +23,4 @@ const serverErrorHandler = (err, req, res, next) => {
 };
 
 module.exports = { psqlErrorHandler, serverErrorHandler, customErrorHandler };
+

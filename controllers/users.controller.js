@@ -8,4 +8,5 @@ const getAllUsers = (req, res, next) => {
     .catch(next);
 };
 
+
 module.exports = { getAllUsers };

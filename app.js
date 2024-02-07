@@ -1,11 +1,12 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
-const cors = require('cors');
 app.use(express.json());
 app.use(cors());
-const getAllTopics = require("./controllers/topics.controller");
-const getAllEndpoints = require("./controllers/endpoints.controller");
+const { getAllTopics } = require("./controllers/topics.controller");
+const { getAllEndpoints } = require("./controllers/endpoints.controller");
 const {
+  getAllArticlesBySortQuery,
   getArticleById,
   getAllArticlesByLifo,
   patchArticleVotes,
@@ -29,9 +30,11 @@ app.get("/api", getAllEndpoints);
 
 app.get("/api/topics", getAllTopics);
 
-app.get("/api/comments", getAllCommentsByLifo)
+app.get("/api/comments", getAllCommentsByLifo);
 
 app.get("/api/articles", getArticlesByTopicQuery);
+
+app.get("/api/articles", getAllArticlesBySortQuery);
 
 app.get("/api/articles", getAllArticlesByLifo);
 
