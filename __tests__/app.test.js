@@ -144,6 +144,7 @@ describe("GET Tests", () => {
             expect(article.article_id).toBe(8);
             expect(article).toHaveProperty("title");
             expect(article).toHaveProperty("topic");
+            expect(article).toHaveProperty("body");
             expect(article).toHaveProperty("author");
             expect(article).toHaveProperty("created_at");
             expect(article).toHaveProperty("votes");
@@ -192,8 +193,6 @@ describe("GET Tests", () => {
             .expect(200)
             .then((response) => {
               const sortedArticles = response.body;
-              console.log("response.body in TEST >>>", response.body);
-              console.log("response.body[0] in TEST >>>", response.body[0]);
               expect(response.body.length).toBe(13);
               sortedArticles.forEach((sortedArticle) => {
                 expect(sortedArticle).toHaveProperty("title");
