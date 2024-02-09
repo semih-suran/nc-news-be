@@ -32,11 +32,15 @@ app.get("/api/topics", getAllTopics);
 
 app.get("/api/comments", getAllCommentsByLifo);
 
-app.get("/api/articles", getArticlesByTopicQuery);
-
-app.get("/api/articles", getAllArticlesBySortQuery);
-
-app.get("/api/articles", getAllArticlesByLifo);
+app.get("/api/articles", (req, res, next) => {
+  if (req.query.topic) {
+    return getArticlesByTopicQuery(req, res, next);
+  } else if (Object.keys(req.query).length > 0) {
+    return getAllArticlesBySortQuery(req, res, next);
+  } else {
+    return getAllArticlesByLifo(req, res, next);
+  }
+});
 
 app.get("/api/articles/:article_id", getArticleById);
 
