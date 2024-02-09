@@ -87,7 +87,6 @@ const getAllArticlesBySortQuery = (req, res, next) => {
           return bValue < aValue ? -1 : 1;
         }
       });
-      console.log('OrderBy used articles >>>>',articles)
       res.send(articles);
     })
     .catch(next);

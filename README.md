@@ -30,6 +30,12 @@ This project is a web API developed for managing various aspects of a content pl
 **Get Articles by Topic Query**
 - Endpoint: `/api/articles`
 - Description: Retrieves an array of articles based on specified topic query.
+example: ?topic=cooking
+
+**Get Articles by Sort Query**
+- Endpoint: `/api/articles`
+- Description: Retrieves an array of articles based on specified column and sort order query.
+example: ?sort_by=votes&order=desc
 
 **Get Article by ID**
 - Endpoint: `/api/articles/:article_id`
@@ -106,7 +112,7 @@ Open both `.env.development` and `.env.test` files and add the necessary environ
 
 - Use the following command to drop and re-create your databases.
 
-> npm run setup-db
+> npm run setup-dbs
 
 - Then use the following command to seed your databases.
 
