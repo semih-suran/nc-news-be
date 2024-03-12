@@ -567,22 +567,3 @@ describe("DELETE Tests", () => {
     });
   });
 });
-
-// test("should return a Status Code: 404 if the specified (topic) does not exist", () => {
-//   return supertest(app)
-//     .get("/api/articles")
-//     .query({ topic: "semih8" })
-//     .expect(404)
-//     .then((response) => {
-//       expect(response.body.msg).toBe("(topic) does not exist.");
-//     });
-// });
-// test("should return a Status Code: 200 and an empty array when no article for the existing topic", () => {
-//   return supertest(app)
-//     .get("/api/articles")
-//     .query({ topic: "paper" })
-//     .expect(200)
-//     .then((response) => {
-//       expect(response.body).toEqual([]);
-//     });
-// });
