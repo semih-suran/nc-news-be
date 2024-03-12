@@ -1,4 +1,4 @@
-const { fetchAllUsers } = require("../models/users.model");
+const { fetchAllUsers, makeUserDefault } = require("../models/users.model");
 
 const getAllUsers = (req, res, next) => {
   fetchAllUsers()
@@ -8,5 +8,17 @@ const getAllUsers = (req, res, next) => {
     .catch(next);
 };
 
+const setUserAsDefault = (req, res, next) => {
+  const { username } = req.params;
 
-module.exports = { getAllUsers };
+  makeUserDefault(username)
+  .then((user) => {
+    if (!user) {
+      return res.status(404).send({ msg: "User not found" });
+    }
+    res.status(200).send({ user });
+  })
+  .catch(next);
+};
+
+module.exports = { getAllUsers, setUserAsDefault };

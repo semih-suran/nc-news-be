@@ -23,8 +23,7 @@ const {
   customErrorHandler,
   serverErrorHandler,
 } = require("./error-handlers");
-
-const { getAllUsers } = require("./controllers/users.controller");
+const { getAllUsers, setUserAsDefault } = require("./controllers/users.controller");
 
 app.get("/api", getAllEndpoints);
 
@@ -47,6 +46,8 @@ app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleIdLifo);
 
 app.get("/api/users", getAllUsers);
+
+app.patch("/api/users/:username/makeDefault", setUserAsDefault);
 
 app.post("/api/articles/:article_id/comments", postCommentToArticle);
 

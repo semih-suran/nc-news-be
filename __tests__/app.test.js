@@ -498,6 +498,44 @@ describe("PATCH Tests", () => {
         });
     });
   });
+  describe("PATCH Default User By Username", () => {
+    test("should set a user as the default, updating is_default to true", () => {
+      const usernameToBeDefault = "lurker";
+      return supertest(app)
+        .patch(`/api/users/${usernameToBeDefault}/makeDefault`)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.user.username).toBe(usernameToBeDefault);
+          expect(body.user.is_default).toBe(true);
+        });
+    });
+  
+    test("should be only one user is set as default at any time", async () => {
+      await supertest(app)
+        .patch(`/api/users/lurker/makeDefault`)
+        .expect(200);
+  
+      await supertest(app)
+        .patch(`/api/users/rogersop/makeDefault`)
+        .expect(200);
+  
+      const { body } = await supertest(app).get("/api/users").expect(200);
+      const defaultUsers = body.users.filter(user => user.is_default);
+  
+      expect(defaultUsers.length).toBe(1);
+      expect(defaultUsers[0].username).toBe("rogersop");
+    });
+  
+    test("should return a Status Code: 404 if a non-existent user", () => {
+      const nonExistentUsername = "ghostUser";
+      return supertest(app)
+        .patch(`/api/users/${nonExistentUsername}/makeDefault`)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("User not found");
+        });
+    });
+  });
 });
 describe("DELETE Tests", () => {
   describe("DELETE Comments By Comment ID", () => {
