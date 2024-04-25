@@ -4,7 +4,7 @@
 
 Access the live NC News platform via the following links:
 
-- **Netlify Web Page**: [NC News on Netlify](https://main--nc-news-semih.netlify.app/)
+- **Netlify Web Page**: [NC News on Netlify](https://nc-news-semih.netlify.app/)
 - **Onrender Database**: [NC News API on Onrender](https://thenews-lhhv.onrender.com/api/)
 
 ## Project Overview
