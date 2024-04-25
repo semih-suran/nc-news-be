@@ -1,138 +1,88 @@
-## BE Project - NC News API
+# NC News API - Backend Project
 
-**Hosted Version**
+## Hosted Version
 
-The project is hosted at **[https://thenews-lhhv.onrender.com/api/]**
+Access the live NC News platform via the following links:
 
-# Project Overview #
+- **Netlify Web Page**: [NC News on Netlify](https://main--nc-news-semih.netlify.app/)
+- **Onrender Database**: [NC News API on Onrender](https://thenews-lhhv.onrender.com/api/)
 
-This project is a web API developed for managing various aspects of a content platform. It offers a range of endpoints that allow users to interact with topics, articles, comments, and user data. Key features include the ability to retrieve information about topics, articles, and users, post comments to articles, patch article votes, and delete comments. The project is designed to provide a flexible and functional API for handling content-related operations.
+## Project Overview
 
+The NC News API is a robust web API designed to manage various aspects of a content platform. It provides a comprehensive set of endpoints for handling topics, articles, comments, and user data. Key features include the ability to retrieve information about topics, articles, and users, post comments to articles, update article votes, and delete comments. This project aims to deliver a flexible and functional API to facilitate seamless content management operations.
 
-# FEATURES #
+## Features
 
-**Get All Endpoints**
-- Endpoint: `/api`
-- Description: Provides a JSON representation of all available endpoints in the API.
+### Core Endpoints
 
-**Get All Topics**
-- Endpoint: `/api/topics`
-- Description: Retrieves an array of all available topics.
+- **Get All Endpoints**: Retrieve a JSON representation of all available endpoints in the API.
+- **Topics**: Access a list of available topics.
+- **Articles**: Retrieve articles using Last In, First Out (LIFO) order, sorted by specified criteria.
+- **Comments**: Fetch comments for articles using LIFO order.
+- **Users**: Retrieve information about all users.
 
-**Get All Articles (LIFO)**
-- Endpoint: `/api/articles`
-- Description: Retrieves all articles using Last In, First Out (LIFO) order.
+### Additional Functionality
 
-**Get All Comments (LIFO)**
-- Endpoint: `/api/comments`
-- Description: Retrieves all comments using LIFO order
+- **Article Filtering**: Filter articles based on topic query and sort order query.
+- **Comment Posting**: Post comments to specific articles.
+- **Vote Management**: Update the vote count for articles.
+- **Comment Deletion**: Delete specific comments.
 
-**Get Articles by Topic Query**
-- Endpoint: `/api/articles`
-- Description: Retrieves an array of articles based on specified topic query.
-example: ?topic=cooking
+## Setup
 
-**Get Articles by Sort Query**
-- Endpoint: `/api/articles`
-- Description: Retrieves an array of articles based on specified column and sort order query.
-example: ?sort_by=votes&order=desc
+### Minimum Versions
 
-**Get Article by ID**
-- Endpoint: `/api/articles/:article_id`
-- Description: Retrieves a specific article by its ID.
-
-**Get Comments by Article ID (LIFO)**
-- Endpoint: `/api/articles/:article_id/comments`
-- Description: Retrieves comments for a specific article using LIFO order.
-
-**Get All Users**
-- Endpoint: `/api/users`
-- Description: Retrieves information about all users.
-
-**Post Comment to Article**
-- Endpoint: `/api/articles/:article_id/comments`
-- Description: Posts a new comment to a specific article.
-
-**Patch Article Votes**
-- Endpoint: `/api/articles/:article_id`
-- Description: Updates the vote count for a specific article.
-
-**Delete Comment**
-- Endpoint: `/api/comments/:comment_id`
-- Description: Deletes a specific comment.
-
-
-# SETUP #
-
-**Minimum Versions**
 - Node.js: v12.0.0 or higher
-- Postgres: v11.0.0 or higher
+- PostgreSQL: v11.0.0 or higher
 
-**Clone the repository:**
-- Use the command below which includes the link for this repository:
+### Installation
 
-> git clone https://github.com/semih-suran/theNews.git
+1. **Clone the Repository**
 
-Then follow these steps to get the project up and running locally:
+   ```bash
+   git clone https://github.com/semih-suran/theNews.git
+   ```
 
-1. **Environment Variables**
-- In the root directory of your project create the following two files locally to be able to connect the relevant database:
+2. **Environment Variables**
 
-> .env.development
-- 
-> .env.test
+   Create `.env.development` and `.env.test` files in the root directory and add the necessary environment variables for your development and test databases.
 
-Open both `.env.development` and `.env.test` files and add the necessary environment variables. Below is an example structure with placeholder values:
+3. **Install Dependencies**
 
-- For .env.development => `PGDATABASE=your_development_database`
+   ```bash
+   npm install
+   npm install --save pg express dotenv
+   npm install --save-dev husky jest jest-extended jest-sorted pg-format supertest
+   ```
 
-- For .env.test => `PGDATABASE=your_test_database`
+   Add the following configuration to your `package.json`:
 
-2. **Install Dependencies**
-- Make sure you have the required dependencies installed. You can install them by running:
+   ```json
+   "jest": {
+     "setupFilesAfterEnv": [
+       "jest-sorted",
+       "jest-extended/all"
+     ]
+   }
+   ```
 
-> npm init -y
-- 
-> npm install
-- 
-> npm install --save pg express dotenv
-- 
-> npm install --save-dev husky jest jest-extended jest-sorted pg-format supertest
+4. **Seed Database**
 
-- Then add this on the root level of package.json:
+   ```bash
+   npm run setup-dbs
+   npm run seed
+   ```
 
-> "jest": {
-  "setupFilesAfterEnv": [
-    "jest-sorted",
-    "jest-extended/all"
-  ]
-}
+5. **Run Tests**
 
-3. **Seed Database**
+   ```bash
+   npm test
+   ```
 
-- Use the following command to drop and re-create your databases.
+6. **Start the Development Server**
 
-> npm run setup-dbs
+   ```bash
+   npm start
+   ```
 
-- Then use the following command to seed your databases.
-
-> npm run seed
-
-4. **Run Tests**
-- To execute the tests, use the following command:
-
-> npm test
-
-This will run the Jest tests and ensure that your application is functioning as expected.
-
-5. **Start the Development Server**
-- To start, use the command below:
-
-> npm start
-
-(default is http://localhost:8080)
-
-This will launch your API locally, and you can access it at the specified port.
-
-**<README Version: #1.2>**
-
+   The API will be accessible locally at the specified port (default: http://localhost:8080).
