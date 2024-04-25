@@ -3,42 +3,42 @@ module.exports = [
     username: "tickle122",
     name: "Tom Tickle",
     avatar_url:
-      "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
+      "https://www.shareicon.net/data/128x128/2016/05/24/770107_man_512x512.png",
     is_default: false,
   },
   {
     username: "grumpy19",
     name: "Paul Grump",
     avatar_url:
-      "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013",
+      "https://www.shareicon.net/data/128x128/2016/05/24/770091_people_512x512.png",
     is_default: false,
   },
   {
     username: "happyamy2016",
     name: "Amy Happy",
     avatar_url:
-      "https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729",
+      "https://www.shareicon.net/data/128x128/2016/05/24/770088_people_512x512.png",
     is_default: false,
   },
   {
     username: "cooljmessy",
     name: "Peter Messy",
     avatar_url:
-      "https://vignette.wikia.nocookie.net/mrmen/images/1/1a/MR_MESSY_4A.jpg/revision/latest/scale-to-width-down/250?cb=20170730171002",
+      "https://www.shareicon.net/data/128x128/2016/05/24/770101_man_512x512.png",
     is_default: false,
   },
   {
     username: "weegembump",
     name: "Gemma Bump",
     avatar_url:
-      "https://vignette.wikia.nocookie.net/mrmen/images/7/7e/MrMen-Bump.png/revision/latest?cb=20180123225553",
+      "https://www.shareicon.net/data/128x128/2016/05/24/770108_people_512x512.png",
     is_default: false,
   },
   {
     username: "jessjelly",
     name: "Jess Jelly",
     avatar_url:
-      "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141",
+      "https://www.shareicon.net/data/128x128/2016/05/24/770097_people_512x512.png",
     is_default: false,
   },
 ];
